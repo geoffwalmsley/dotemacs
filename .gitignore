@@ -1,0 +1,7 @@
+elpa/
+.org-id-locations
+auto-save-list
+/.DS_Store
+org-roam.db
+*~
+bookmarks
