@@ -166,6 +166,13 @@
 ;; Magit
 (load-file "~/.emacs.d/gemacs/gemacs-magit.el")
 
+;; Projectile
+(load-file "~/.emacs.d/gemacs/gemacs-projectile.el")
+
+;; Python setup
+(load-file "~/.emacs.d/gemacs/gemacs-python.el")
+
+
 ;; Custom Vars
 
 (custom-set-variables
@@ -177,7 +184,7 @@
    '("d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
  '(org-agenda-files '("~/org/journal.org" "~/org/inbox.org"))
  '(package-selected-packages
-   '(magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package)))
+   '(python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

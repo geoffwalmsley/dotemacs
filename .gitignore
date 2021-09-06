@@ -5,3 +5,5 @@ auto-save-list
 org-roam.db
 *~
 bookmarks
+org-roam.db
+projectile-bookmarks.eld
