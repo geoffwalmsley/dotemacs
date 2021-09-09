@@ -172,6 +172,25 @@
 ;; Python setup
 (load-file "~/.emacs.d/gemacs/gemacs-python.el")
 
+;; Elfeed
+(load-file "~/.emacs.d/gemacs/gemacs-elfeed.el")
+
+;; pdf-tools
+(load-file "~/.emacs.d/gemacs/gemacs-pdf-tools.el")
+
+;; ERC (IRC client for emacs)
+(load-file "~/.emacs.d/gemacs/gemacs-erc.el")
+
+;; EWW
+(load-file "~/.emacs.d/gemacs/gemacs-eww.el")
+
+
+
+
+
+
+
+
 
 ;; Custom Vars
 
@@ -182,9 +201,12 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
+ '(elfeed-feeds
+   '("http://export.arxiv.org/rss/cs.CL" "http://export.arxiv.org/rss/cs.SY" "http://export.arxiv.org/rss/stat" "http://export.arxiv.org/rss/econ" "http://export.arxiv.org/rss/eess.SY/"))
  '(org-agenda-files '("~/org/journal.org" "~/org/inbox.org"))
  '(package-selected-packages
-   '(python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package)))
+   '(org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
+ '(pdf-tools-handle-upgrades nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

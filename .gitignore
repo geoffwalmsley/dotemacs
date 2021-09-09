@@ -7,3 +7,8 @@ org-roam.db
 bookmarks
 org-roam.db
 projectile-bookmarks.eld
+eshell/
+eww-bookmarks
+network-security.data
+transient/
+url/
