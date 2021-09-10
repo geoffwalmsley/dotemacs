@@ -1,15 +1,17 @@
 ;; Elfeed - move to separate file
-(use-package elfeed
-  :ensure t)
 
-(setq elfeed-feeds
-      '(("http://export.arxiv.org/rss/cs.CL" computation language)
-	("http://export.arxiv.org/rss/cs.CR" cryptography security)
-	("http://export.arxiv.org/rss/cs.SY" systems)
-	("http://export.arxiv.org/rss/cs.stat" statistics)
-	("http://export.arxiv.org/rss/cs.econ" economics)
-	("http://export.arxiv.org/rss/cs.CL" technology)
-	("http://export.arxiv.org/rss/math.NT" numbertheory)
-	("http://export.arxiv.org/rss/math.DS" systems)
-	))
+(use-package elfeed
+  :ensure t
+  :config
+  (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
+        elfeed-show-entry-switch 'display-buffer)
+  (setq elfeed-sort-order 'ascending)
+  )
+
+(use-package elfeed-org
+    :ensure t
+    :config
+   (setq rmh-elfeed-org-files (list "~/org/elfeed.org")))
+
+
 
