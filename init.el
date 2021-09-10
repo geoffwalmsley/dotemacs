@@ -86,6 +86,7 @@
 ;; Theme
 ;; 
 (use-package modus-themes
+  :ensure t
   :init (load-theme 'modus-vivendi t))
 
 
@@ -112,6 +113,7 @@
 ;; Which  Key
 ;; 
 (use-package which-key
+  :ensure t
   :init (which-key-mode)
   :diminish which-key-mode
   :config
@@ -122,6 +124,7 @@
 ;; Ivy and Counsel
 ;; 
 (use-package counsel
+  :ensure t
   :bind (("C-M-j" . 'counsel-switch-buffer)
          :map minibuffer-local-map
          ("C-r" . 'counsel-minibuffer-history))
@@ -129,6 +132,7 @@
   (counsel-mode 1))
 
 (use-package ivy
+  :ensure t
   :diminish
   :bind (("C-s" . swiper)
          :map ivy-minibuffer-map
@@ -144,7 +148,9 @@
          ("C-k" . ivy-previous-line)
          ("C-d" . ivy-reverse-i-search-kill))
   :config
-  (ivy-mode 1))
+  (ivy-mode t)
+  (setq ivy-wrap t)
+  )
 
 (use-package ivy-rich
   :init
