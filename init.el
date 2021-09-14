@@ -194,11 +194,16 @@
 ;; EWW
 (load-file "~/.emacs.d/gemacs/gemacs-eww.el")
 
+;; vterm
+(load-file "~/.emacs.d/gemacs/gemacs-vterm.el")
 
 
+;; Make clsp and clib and clvm files lisp-mode
+(add-to-list 'auto-mode-alist '("\\.clsp\\'" . lisp-mode))
 
 
-
+;; setup pocketreader
+(require 'pocket-reader)
 
 
 
@@ -213,7 +218,7 @@
    '("d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
  '(org-agenda-files '("~/org/journal.org" "~/org/inbox.org"))
  '(package-selected-packages
-   '(jupyter elfeed-goodies elfeed-org org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
+   '(pocket-reader company w3m vterm jupyter elfeed-goodies elfeed-org org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
  '(pdf-tools-handle-upgrades nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

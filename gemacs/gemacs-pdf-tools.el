@@ -1,3 +1,4 @@
+
 ;; PDF-Tools
 ;; For help setting up see https://emacs.stackexchange.com/questions/13314/install-pdf-tools-on-emacs-macosx
 (use-package pdf-tools
@@ -8,4 +9,4 @@
       (setq pdf-info-epdfinfo-program "/usr/local/bin/epdfinfo")
       )
 
-(pdf-tools-install)
+;(pdf-tools-install)

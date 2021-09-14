@@ -26,6 +26,6 @@
     (erc-tls :server "irc.libera.chat"
 		:port 6697
 		:nick "mathsboy"
-		:password ""
+		
 		))
 
