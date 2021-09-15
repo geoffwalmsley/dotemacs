@@ -5,8 +5,10 @@
   :config
   (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
         elfeed-show-entry-switch 'display-buffer)
-  (setq elfeed-sort-order 'ascending)
+  
   )
+
+;(elfeed-goodies/setup)
 
 (use-package elfeed-org
     :ensure t

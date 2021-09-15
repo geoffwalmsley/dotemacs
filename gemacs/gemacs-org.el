@@ -54,6 +54,23 @@
 
   )
 
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((python . t)))
+
+(setq org-confirm-babel-evaluate nil)
+(add-hook 'python-mode-hook
+            (lambda ()
+              (setq py-python-command "python3")
+              (setq py-default-interpreter "python3")))
+
+
+
+
+
+
+
+
 (setq gemacs/org-inbox-path "~/org/inbox.org")
 (setq gemacs/org-journal-path "~/org/journal.org")
 

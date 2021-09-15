@@ -1,13 +1,14 @@
 ;; Python Setup
 
 ;; Use jupyter with M-x jupyter-run-repl
+;; Execute buffer with C-c C-c
+;; Use M-x py-split-windows-on-execute-off to keep everything static.
 
-
-
-;;(setq py-install-directory "/usr/local/bin/")
-;;(setq py-shell-name "/usr/local/bin/python3")
 (use-package python-mode
   :ensure t
+  :config
+  ;(setq-default py-split-windows-on-execute-function 'split-window-horizontally)
+  (setq py-split-window-on-execute nil)
   )
 
 (use-package pyvenv
@@ -16,10 +17,3 @@
   (pyvenv-mode t)
 
   )
-  ;; Set correct Python interpreter
-  ;(setq pyvenv-post-activate-hooks
-  ;      (list (lambda ()
-  ;              (setq python-shell-interpreter (concat pyvenv-virtual-env "bin/python3")))))
-  ;(setq pyvenv-post-deactivate-hooks
-  ;      (list (lambda ()
-  ;              (setq python-shell-interpreter "python3")))))

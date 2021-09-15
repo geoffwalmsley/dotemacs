@@ -57,7 +57,7 @@
 
 ;; Highlight current line.
 (global-hl-line-mode t)
-(global-display-line-numbers-mode t)
+;(global-display-line-numbers-mode t)
 
 ;; Autocomplete and highligh brackets
 (electric-pair-mode 1)
@@ -202,10 +202,6 @@
 (add-to-list 'auto-mode-alist '("\\.clsp\\'" . lisp-mode))
 
 
-;; setup pocketreader
-(require 'pocket-reader)
-
-
 
 ;; Custom Vars
 
@@ -218,11 +214,13 @@
    '("d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
  '(org-agenda-files '("~/org/journal.org" "~/org/inbox.org"))
  '(package-selected-packages
-   '(pocket-reader company w3m vterm jupyter elfeed-goodies elfeed-org org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
+   '(company w3m vterm jupyter elfeed-goodies elfeed-org org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
  '(pdf-tools-handle-upgrades nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(elfeed-search-date-face ((t (:foreground "#eee"))))
+ '(elfeed-search-title-face ((t (:foreground "#82b0ec"))))
+ '(elfeed-search-unread-title-face ((t (:weight normal :family "Hack")))))
