@@ -34,11 +34,15 @@
 
 (menu-bar-mode -1)            ; Disable the menu bar
 
+(global-set-key (kbd "C-<down>") (kbd "C-u 1 C-v"))
+(global-set-key (kbd "C-<up>") (kbd "C-u 1 M-v"))
+
 ;; Set up the visible bell
 (setq visible-bell t)
 
-(column-number-mode)
-(global-display-line-numbers-mode t)
+;; (column-number-mode)
+;; (global-display-line-numbers-mode t)
+
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
@@ -57,7 +61,6 @@
 
 ;; Highlight current line.
 (global-hl-line-mode t)
-;(global-display-line-numbers-mode t)
 
 ;; Autocomplete and highligh brackets
 (electric-pair-mode 1)
@@ -197,10 +200,8 @@
 ;; vterm
 (load-file "~/.emacs.d/gemacs/gemacs-vterm.el")
 
-
 ;; Make clsp and clib and clvm files lisp-mode
 (add-to-list 'auto-mode-alist '("\\.clsp\\'" . lisp-mode))
-
 
 
 ;; Custom Vars
