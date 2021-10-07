@@ -56,7 +56,9 @@
 
 (org-babel-do-load-languages
  'org-babel-load-languages
- '((python . t)))
+ '((python . t)
+   (shell . t))
+)
 
 (setq org-confirm-babel-evaluate nil)
 (add-hook 'python-mode-hook

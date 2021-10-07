@@ -1,4 +1,4 @@
-;; 
+; 
 ;; Packaging Setup
 ;;
 
@@ -20,7 +20,6 @@
 (setq use-package-always-ensure t)
 
 
-
 ;; 
 ;; Basic UI
 ;;
@@ -40,9 +39,21 @@
 ;; Set up the visible bell
 (setq visible-bell t)
 
-;; (column-number-mode)
-;; (global-display-line-numbers-mode t)
+;; Line Numbering
+(column-number-mode)
+(global-display-line-numbers-mode t)
 
+;; Disable line numbers for some modes
+(dolist (mode '(org-mode-hook
+                term-mode-hook
+                shell-mode-hook
+                eshell-mode-hook
+		vterm-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+
+;; Global yes-or-no
+(fset 'yes-or-no-p 'y-or-n-p)
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
@@ -72,6 +83,15 @@
 (setq mac-command-modifier 'meta)
 
 
+;; Buffer-Move (swapping windows)
+(require 'buffer-move)
+(global-set-key (kbd "<C-S-up>")     'buf-move-up)
+(global-set-key (kbd "<C-S-down>")   'buf-move-down)
+(global-set-key (kbd "<C-S-left>")   'buf-move-left)
+(global-set-key (kbd "<C-S-right>")  'buf-move-right)
+
+
+(require 'ox-gemini)
 
 ;; 
 ;; Fonts
@@ -133,6 +153,13 @@
          ("C-r" . 'counsel-minibuffer-history))
   :config
   (counsel-mode 1))
+
+;; (use-package counsel
+;;   :bind (("M-x" . counsel-M-x)
+;;          ("C-x b" . counsel-ibuffer)
+;;          ("C-x C-f" . counsel-find-file)
+;;          :map minibuffer-local-map
+;;          ("C-r" . 'counsel-minibuffer-history)))
 
 (use-package ivy
   :ensure t
@@ -201,8 +228,10 @@
 (load-file "~/.emacs.d/gemacs/gemacs-vterm.el")
 
 ;; Make clsp and clib and clvm files lisp-mode
-(add-to-list 'auto-mode-alist '("\\.clsp\\'" . lisp-mode))
+;; (add-to-list 'auto-mode-alist '("\\.clsp\\'" . lisp-mode))
 
+(load-file "~/.emacs.d/chialisp-mode.el")
+(require 'generic-x)
 
 ;; Custom Vars
 
@@ -213,9 +242,10 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
+ '(line-number-mode nil)
  '(org-agenda-files '("~/org/journal.org" "~/org/inbox.org"))
  '(package-selected-packages
-   '(company w3m vterm jupyter elfeed-goodies elfeed-org org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
+   '(htmlize ox-gemini bongo elpher rg counsel-projectile buffer-move elfeed-org elfeed company w3m vterm jupyter org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
  '(pdf-tools-handle-upgrades nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
