@@ -8,3 +8,45 @@
   nil
   "Generic mode for chialisp syntax highlighting"
   )
+
+
+(defun gemacs/run ()
+  "Tangle and Run the chialisp module at point"
+  (interactive)
+  (org-babel-tangle)
+  (let ((x (org-element-at-point)))
+    ;; TODO Confirm that the src_block language is chialisp
+    (let ((cmd (cdr (split-string (plist-get (car (cdr x)) :parameters) " "))))
+      (setq compiled-chialisp (shell-command-to-string (concat "run -i include " (car cmd))))
+      
+      (with-output-to-temp-buffer "*chialisp output*"
+        (print
+          (shell-command-to-string (concat "run -i include " (car cmd)))
+        )
+      ) 
+    ) 
+  )
+)
+
+
+(defun gemacs/run-and-brun ()
+  "Tangle and Run the chialisp module at point"
+  (interactive)
+  (org-babel-tangle)
+  (let ((x (org-element-at-point)))
+    ;; TODO Confirm that the src_block language is chialisp
+    (let ((cmd (cdr (split-string (plist-get (car (cdr x)) :parameters) " "))))
+      (setq compiled-chialisp (shell-command-to-string (concat "run -i include " (car cmd))))
+      (setq solution (read-string "Add a solution [default '()']: " nil nil "()"))
+      (with-output-to-temp-buffer "*chialisp output*"
+        (print compiled-chialisp)
+	(print solution)
+	(print (shell-command-to-string (format "brun '%s' '%s'" compiled-chialisp solution)))
+      ) 
+    ) 
+  )
+)
+
+
+(define-key org-mode-map (kbd "C-c x") 'gemacs/run-and-brun)
+(define-key org-mode-map (kbd "C-c d") 'gemacs/run)

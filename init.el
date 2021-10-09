@@ -19,6 +19,9 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; Chialisp Experiment
+
+(require 'org-element)
 
 ;; 
 ;; Basic UI
