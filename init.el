@@ -19,9 +19,33 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-;; Chialisp Experiment
 
+;; Using perspective for buffer switching
+(use-package perspective
+  :ensure t
+  :bind
+  ("C-x C-b" . persp-ivy-switch-buffer)   ; or use a nicer switcher, see below
+  :config
+  (persp-mode))
+
+(add-hook 'dired-mode-hook
+          (lambda ()
+	    (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
+            (define-key dired-mode-map (kbd "^")
+                        (lambda () (interactive) (find-alternate-file "..")))))
+
+;; Make vterm load ~/.bash_profile
+(defun gemacs/source-bash-profile ()
+      (interactive)
+      (vterm-send-string "source ~/.bash_profile\n"))
+
+(add-hook 'vterm-mode-hook #'gemacs/source-bash-profile)
+
+
+;; Items for setting up src blocks in org and tufte css. Should move to gemacs/gemacs-org.el
 (require 'org-element)
+
+(require 'ox-tufte)
 
 ;; 
 ;; Basic UI
@@ -245,10 +269,11 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    '("d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
+ '(erc-notify-list '("mathsboy") nil nil "Notify for mentions of myself")
  '(line-number-mode nil)
  '(org-agenda-files '("~/org/journal.org" "~/org/inbox.org"))
  '(package-selected-packages
-   '(htmlize ox-gemini bongo elpher rg counsel-projectile buffer-move elfeed-org elfeed company w3m vterm jupyter org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
+   '(perspective ox-tufte htmlize ox-gemini bongo elpher rg counsel-projectile buffer-move elfeed-org elfeed company w3m vterm jupyter org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
  '(pdf-tools-handle-upgrades nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -258,3 +283,4 @@
  '(elfeed-search-date-face ((t (:foreground "#eee"))))
  '(elfeed-search-title-face ((t (:foreground "#82b0ec"))))
  '(elfeed-search-unread-title-face ((t (:weight normal :family "Hack")))))
+(put 'dired-find-alternate-file 'disabled nil)

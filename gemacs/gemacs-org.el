@@ -31,6 +31,36 @@
   (visual-line-mode 1))
 
 
+(defun gemacs/org-publish-setup ()
+  (require 'ox-publish)
+  (setq org-publish-project-alist
+	'(("aggsig-org-files"
+	   :base-directory "~/Dev/AggSig/org/"
+	   :base-extension "org"
+	   :publishing-directory "~/Dev/AggSig/html/"
+	   :recursive t
+	   :publishing-function org-html-publish-to-tufte-html
+	   :headline-levels 8
+	   :auto-preamble t
+	   :html-container "section"
+	   :html-divs ((preamble "div" "preamble")
+	     (content "article" "content")
+	     (postamble "div" "postamble"))
+	   :html-doctype "html5"
+	   :html-html5-fancy t
+	   )
+	  ("aggsig-static"
+	   :base-directory "~/Dev/Aggsig/org/"
+	   :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
+	   :publishing-directory "~/Dev/AggSig/html/"
+	   :recursive t
+	   :publishing-function org-publish-attachment
+	   )
+	  ("aggsig" :components ("aggsig-org-files" "aggsig-static"))
+	  )
+	))
+
+
 ;; Key Bindings
 (global-set-key (kbd "C-c l") 'org-store-link)
 (global-set-key (kbd "C-c a") 'org-agenda)
@@ -51,6 +81,7 @@
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
   (gemacs/org-font-setup)
+  (gemacs/org-publish-setup)
 
   )
 
@@ -81,21 +112,21 @@
 	;("t" "Todo" entry (headline gemacs/org-inbox-path "Tasks")
         ; "* TODO %?\n  %i\n")
 	("t" "TODO" entry (file+headline gemacs/org-inbox-path "Tasks")
-         "* TODO %? %^G \n  %U" :empty-lines 1)
+         "* TODO %? \n  %U" :empty-lines 1)
 	("s" "Scheduled TODO" entry (file+headline gemacs/org-inbox-path "Tasks")
-        "* TODO %? %^G \nSCHEDULED: %^t\n  %U" :empty-lines 1)
+        "* TODO %? \nSCHEDULED: %^t\n  %U" :empty-lines 1)
         ("d" "Deadline" entry (file+headline gemacs/org-inbox-path "Tasks")
-            "* TODO %? %^G \n  DEADLINE: %^t" :empty-lines 1)
+            "* TODO %? \n  DEADLINE: %^t" :empty-lines 1)
         ("p" "Priority" entry (file+headline gemacs/org-inbox-path "Tasks")
-         "* TODO [#A] %? %^G \n  SCHEDULED: %^t")
+         "* TODO [#A] %? \n  SCHEDULED: %^t")
 	("a" "Appointment" entry (file+headline gemacs/org-inbox-path "Tasks")
-        "* %? %^G \n  %^t")
+        "* %? \n  %^t")
         ("l" "Link" entry (file+headline gemacs/org-inbox-path "Tasks")
-        "* TODO %a %? %^G\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n")
+        "* TODO %a %? \nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\"))\n")
         ("n" "Note" entry (file+headline gemacs/org-inbox-path "Notes")
-            "* %? %^G\n%U" :empty-lines 1)
+            "* %? \n%U" :empty-lines 1)
         ("j" "Journal" entry (file+datetree gemacs/org-journal-path)
-        "* %? %^G\nEntered on %U\n")
+        "* %? \nEntered on %U\n")
 	
 
 	))

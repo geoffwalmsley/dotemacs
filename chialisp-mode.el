@@ -48,5 +48,30 @@
 )
 
 
+(defun gemacs/run-and-brun-with-solution ()
+  "Tangle, Run and Brun chialisp module with solution filepath in src_block tags"
+  (interactive)
+  (org-babel-tangle)
+  (message "compiling and executing chialisp")
+  (let ((x (org-element-at-point)))
+    (let ((cmd (cdr (split-string (plist-get (car (cdr x)) :parameters) " "))))
+      (setq compiled-chialisp (shell-command-to-string (concat "run -i include " (car cmd))))
+      (setq solution (with-temp-buffer (insert-file-contents (car (cdr (cdr cmd)))) (buffer-string)))
+      (setq compiled-solution (shell-command-to-string (concat "run -i include " (car (cdr (cdr cmd))))))
+      (setq output (shell-command-to-string (format "brun '%s' '%s'" compiled-chialisp compiled-solution)))
+    
+    (with-output-to-temp-buffer "*chialisp output*"
+      (print compiled-chialisp)
+      (print solution)
+      (print compiled-solution)
+      (print output)
+    )
+)
+    )
+  (message "chialisp process complete.")
+)
+
+
+(define-key org-mode-map (kbd "C-c f") 'gemacs/run-and-brun-with-solution)
 (define-key org-mode-map (kbd "C-c x") 'gemacs/run-and-brun)
 (define-key org-mode-map (kbd "C-c d") 'gemacs/run)
