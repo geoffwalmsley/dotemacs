@@ -1,4 +1,6 @@
-; 
+;; -*- lexical-binding: t; -*-
+
+
 ;; Packaging Setup
 ;;
 
@@ -19,6 +21,21 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; Org AI
+(use-package org-ai
+  :ensure
+  :commands (org-ai-mode)
+  :custom
+  (org-ai-openai-api-token "") ;; ADD DURING SETUP
+  :init
+  (add-hook 'org-mode-hook #'org-ai-mode)
+  ;; :config
+  ;; if you are using yasnippet and want `ai` snippets
+  ;; (org-ai-install-yasnippets))
+ )
+
+
+(add-to-list 'image-types 'svg)
 
 ;; Using perspective for buffer switching
 (use-package perspective
@@ -34,18 +51,23 @@
             (define-key dired-mode-map (kbd "^")
                         (lambda () (interactive) (find-alternate-file "..")))))
 
+
+;; save backups and autosave files to tmp
+(setq backup-directory-alist
+      `((".*" . ,temporary-file-directory)))
+(setq auto-save-file-name-transforms
+      `((".*" ,temporary-file-directory t)))
+
 ;; Make vterm load ~/.bash_profile
 (defun gemacs/source-bash-profile ()
       (interactive)
-      (vterm-send-string "source ~/.bash_profile\n"))
+      (vterm-send-string "bash\nsource ~/.bash_profile\n"))
 
 (add-hook 'vterm-mode-hook #'gemacs/source-bash-profile)
 
-
-;; Items for setting up src blocks in org and tufte css. Should move to gemacs/gemacs-org.el
-(require 'org-element)
-
-(require 'ox-tufte)
+;; ace-jump
+(require 'ace-jump-mode)
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 
 ;; 
 ;; Basic UI
@@ -60,15 +82,15 @@
 
 (menu-bar-mode -1)            ; Disable the menu bar
 
-(global-set-key (kbd "C-<down>") (kbd "C-u 1 C-v"))
-(global-set-key (kbd "C-<up>") (kbd "C-u 1 M-v"))
+(global-set-key (kbd "C-<down>") (kbd "C-u 5 C-v"))
+(global-set-key (kbd "C-<up>") (kbd "C-u 5 M-v"))
 
 ;; Set up the visible bell
 (setq visible-bell t)
 
 ;; Line Numbering
 (column-number-mode)
-(global-display-line-numbers-mode t)
+;; (global-display-line-numbers-mode t)
 
 ;; Disable line numbers for some modes
 (dolist (mode '(org-mode-hook
@@ -81,14 +103,6 @@
 
 ;; Global yes-or-no
 (fset 'yes-or-no-p 'y-or-n-p)
-
-;; Disable line numbers for some modes
-(dolist (mode '(org-mode-hook
-                term-mode-hook
-                shell-mode-hook
-	        treemacs-mode-hook
-                eshell-mode-hook))
-  (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 ;; Turn off bell, turn on mode line flash
 (setq visible-bell nil
@@ -108,7 +122,7 @@
 
 ;; Use CMD as META on mac
 (setq mac-command-modifier 'meta)
-
+(setq mac-option-modifier 'super)
 
 ;; Buffer-Move (swapping windows)
 (require 'buffer-move)
@@ -179,6 +193,7 @@
          :map minibuffer-local-map
          ("C-r" . 'counsel-minibuffer-history))
   :config
+  (setq enable-recursive-minibuffers t)
   (counsel-mode 1))
 
 ;; (use-package counsel
@@ -195,8 +210,8 @@
          :map ivy-minibuffer-map
          ("TAB" . ivy-alt-done)
          ("C-l" . ivy-alt-done)
-         ("C-j" . ivy-next-line)
-         ("C-k" . ivy-previous-line)
+         ;; ("C-j" . ivy-next-line)
+         ;; ("C-k" . ivy-previous-line)
          :map ivy-switch-buffer-map
          ("C-k" . ivy-previous-line)
          ("C-l" . ivy-done)
@@ -211,7 +226,9 @@
 
 (use-package ivy-rich
   :init
-  (ivy-rich-mode 1))
+  (ivy-rich-mode 1)
+  :config
+  (setq ivy-rich-parse-remote-buffer nil))
 
 ;; 
 ;; Helpful Help
@@ -225,6 +242,32 @@
   ([remap describe-command] . helpful-command)
   ([remap describe-variable] . counsel-describe-variable)
   ([remap describe-key] . helpful-key))
+
+
+;; TRAMP settings for python venv. 
+
+;; This probably needs to be edited every time we do a remote connection to
+;; a different host. Should be updated according to:
+;; https://www.gnu.org/software/emacs/manual/html_node/tramp/Remote-programs.html
+(use-package tramp
+  :ensure nil
+  :config
+  (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+  (add-to-list 'tramp-remote-path "/home/geoff/AggSigAPI/venv/bin/")
+  (add-to-list 'tramp-remote-path "/home/geoff/chia-blockchain/venv/bin/")
+  
+  (customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
+  (add-to-list 'tramp-connection-properties
+               (list (regexp-quote "/ssh:geoff@memex:")
+		     (regexp-quote "/ssh:geoff@memex2:")
+
+                   "session-timeout" nil))
+  (setq enable-remote-dir-locals t))
+
+
+;; (customize-set-variable 'tramp-verbose 6 "Enable remote command traces")
+;; (with-eval-after-load 'tramp (tramp-change-syntax 'simplified))
+;; (setq enable-remote-dir-locals t)
 
 
 ;; Org Mode
@@ -254,11 +297,17 @@
 ;; vterm
 (load-file "~/.emacs.d/gemacs/gemacs-vterm.el")
 
+;; rust
+;; (load-file "~/.emacs.d/gemacs/gemacs-rust.el")
+
 ;; Make clsp and clib and clvm files lisp-mode
 ;; (add-to-list 'auto-mode-alist '("\\.clsp\\'" . lisp-mode))
 
 (load-file "~/.emacs.d/chialisp-mode.el")
+
 (require 'generic-x)
+
+(yas-global-mode)
 
 ;; Custom Vars
 
@@ -268,13 +317,16 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   '("d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
+   '("71ac1434a07579da9b1ec1dd1a2b9cfa3182523d750678b68db6c25749fb6494" "986cdc701d133f7c6b596f06ab5c847bebdd53eb6bc5992e90446d2ddff2ad9e" "5fdc0f5fea841aff2ef6a75e3af0ce4b84389f42e57a93edc3320ac15337dc10" "d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
  '(erc-notify-list '("mathsboy") nil nil "Notify for mentions of myself")
+ '(exec-path
+   '("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/Applications/Emacs.app/Contents/MacOS/bin-x86_64-10_14" "/Applications/Emacs.app/Contents/MacOS/libexec-x86_64-10_14" "/Applications/Emacs.app/Contents/MacOS/libexec" "/Applications/Emacs.app/Contents/MacOS/bin" "/Users/jupiter/.cargo/bin"))
  '(line-number-mode nil)
  '(org-agenda-files '("~/org/journal.org" "~/org/inbox.org"))
  '(package-selected-packages
-   '(perspective ox-tufte htmlize ox-gemini bongo elpher rg counsel-projectile buffer-move elfeed-org elfeed company w3m vterm jupyter org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
- '(pdf-tools-handle-upgrades nil))
+   '(tree-sitter-langs tree-sitter org-ai org-roam-ui paredit projectile-ripgrep ripgrep load-theme-buffer-local lsp-ui lsp-mode blacken ob-ipython perspective ox-tufte htmlize ox-gemini bongo elpher rg counsel-projectile buffer-move elfeed-org elfeed company w3m vterm jupyter org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
+ '(pdf-tools-handle-upgrades nil)
+ '(tramp-use-ssh-controlmaster-options nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -283,4 +335,5 @@
  '(elfeed-search-date-face ((t (:foreground "#eee"))))
  '(elfeed-search-title-face ((t (:foreground "#82b0ec"))))
  '(elfeed-search-unread-title-face ((t (:weight normal :family "Hack")))))
+(put 'upcase-region 'disabled nil)
 (put 'dired-find-alternate-file 'disabled nil)

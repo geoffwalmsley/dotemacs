@@ -15,7 +15,7 @@
   :init
   (setq elfeed-db-directory (expand-file-name "elfeed" user-emacs-directory)
         elfeed-show-entry-switch 'display-buffer)
-  (setq elfeed-search-title-max-width 180)
+  (setq elfeed-search-title-max-width 120)
   :hook ('org-store-link-functions . 'gemacs/org-elfeed-entry-store-link)
 
   ;; (define-key elfeed-search-mode-map "l" (elfeed-tag-selection-as 'readlater))

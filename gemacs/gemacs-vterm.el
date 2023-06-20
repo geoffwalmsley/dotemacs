@@ -1,4 +1,5 @@
-;;(add-to-list 'exec-path "")
+;; -*- lexical-binding: t; -*-
 
 (use-package vterm
-    :ensure t)
+  :ensure t
+  )
