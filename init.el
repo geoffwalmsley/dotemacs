@@ -272,9 +272,6 @@
 ;; rust
 ;; (load-file "~/.emacs.d/gemacs/gemacs-rust.el")
 
-;; Make clsp and clib and clvm files lisp-mode
-;; (add-to-list 'auto-mode-alist '("\\.clsp\\'" . lisp-mode))
-
 (load-file "~/.emacs.d/chialisp-mode.el")
 
 (require 'generic-x)
