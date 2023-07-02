@@ -32,40 +32,112 @@
   (variable-pitch-mode 1)
   (visual-line-mode 1))
 
+(use-package ox-tufte
+  :ensure t)
 
-(defun gemacs/org-publish-setup ()
-  (require 'ox-publish)
-  (setq org-publish-project-alist
-	'(("aggsig-org-files"
-	   :base-directory "~/Dev/AggSig/org/"
-	   :base-extension "org"
-	   :publishing-directory "~/Dev/AggSig/html/"
-	   :recursive t
-	   :publishing-function org-html-publish-to-tufte-html
-	   :headline-levels 8
-	   :auto-preamble t
-	   :html-container "section"
-	   :html-divs ((preamble "div" "preamble")
-	     (content "article" "content")
-	     (postamble "div" "postamble"))
-	   :html-doctype "html5"
-	   :html-html5-fancy t
-	   )
-	  ("aggsig-static"
-	   :base-directory "~/Dev/Aggsig/org/"
-	   :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf"
-	   :publishing-directory "~/Dev/AggSig/html/"
-	   :recursive t
-	   :publishing-function org-publish-attachment
-	   )
-	  ("aggsig" :components ("aggsig-org-files" "aggsig-static"))
-	  )
+(setq aggsig/common-properties
+      `(:author "Geoff Walmsleu"
+	:with-toc nil
+        :html-doctype "html5"
+        :html-head-include-default-style nil
+        :html-head-include-scripts nil
+        :html-html5-fancy t
+        :html-metadata-timestamp-format "%e %B %Y"
 	))
 
-;; Items for setting up src blocks in org and tufte css. Should move to gemacs/gemacs-org.el
-(require 'org-element)
 
-(require 'ox-tufte)
+(defun modern-tufte-html-template (contents info)
+  (concat
+   "<!DOCTYPE html>\n"
+   (format "<html lang=\"%s\">\n" (plist-get info :language))
+   "<head>\n"
+   (format "<meta charset=\"%s\">\n" (coding-system-get org-html-coding-system 'mime-charset))
+   "<meta name=\"viewport\" content=\"width=device-width\">\n"
+   "<meta name=\"description\" content=\"agg_sig_me\">\n"
+   "<link rel=\"stylesheet\" href=\"css/tufte.css\" type=\"text/css\" />\n"
+   "<style type=\"text/css\">.figure {width: 55%; vertical-align: baseline;}</style>"
+   "</head>\n"
+   "<body>\n"
+   "<div id=\"body\"><div id=\"container\">"
+   "<div id=\"navigation\">"
+   "<a href=\"index.html\">Home</a>"
+   " · <a href=\"about.html\">About</a>"
+   " · <a href=\"uses_this.html\">Uses This</a>"
+   "</div>"
+   "<div id=\"content\"><article>"
+   (format "<h1 class=\"title\">%s</h1>\n" (org-export-data (or (plist-get info :title) "") info))
+   contents
+  ))
+
+
+
+
+(defun modern-tufte-html-section (section contents info)
+  (let* ((headline (org-export-get-parent-headline section))
+         (level (org-element-property :level headline)))
+    (concat
+     "<section>"
+     (when headline
+       (concat
+        (format "<h%s>" (1+ level))
+        ;; NB Fix for that one post that has subscript in headlines.
+        (format "%s" (s-replace-regexp (rx "_{" (group-n 1 (1+ anything)) "}")
+                                       "<sub>\\1</sub>"
+                                       (org-element-property :raw-value headline)))
+        (format "</h%s>\n" (1+ level))))
+     contents
+     "</section>\n")))
+
+(defun modern-tufte-html-headline (headline contents info)
+  contents)
+
+(org-export-define-derived-backend 'modern-tufte-html 'tufte-html
+  :translate-alist '((template . modern-tufte-html-template)
+                     (section . modern-tufte-html-section)
+                     (headline . modern-tufte-html-headline)
+                     (item . org-html-item)))
+
+(defun org-html-publish-to-modern-tufte-html (plist filename pub-dir)
+  "Publish an org file to Tufte-styled HTML.
+PLIST is the property list for the given project.  FILENAME is
+the filename of the Org file to be published.  PUB-DIR is the
+publishing directory.
+Return output file name."
+  (org-publish-org-to 'modern-tufte-html filename
+                      (concat "." (or (plist-get plist :html-extension)
+                                      org-html-extension
+                                      "html"))
+                      plist pub-dir))
+
+
+(require 'ox-publish)
+
+(setq org-publish-project-alist
+      '(("aggsig-org-files"
+	 :base-directory "~/Dev/agg_sig_me/org/"
+	 :base-extension "org"
+	 :publishing-directory "~/Dev/agg_sig_me/html/"
+	 :recursive t
+	 :publishing-function org-html-publish-to-modern-tufte-html
+	 :with-toc nil
+	 :headline-levels 8
+	 :html-scripts t
+	 :html-style t
+	 :html-link-use-abs-url nil
+	 )
+	("aggsig-static"
+	 :base-directory "~/Dev/agg_sig_me/org/"
+	 :base-extension "css\\|js\\|png\\|jpg\\|gif\\|pdf\\|mp3\\|ogg\\|swf\\|eot\\|ttf\\|woff\\|svg"
+	 :publishing-directory "~/Dev/agg_sig_me/html/"
+	 :recursive t
+	 :publishing-function org-publish-attachment
+	 )
+	("aggsig" :components ("aggsig-org-files" "aggsig-static"))
+	)
+      )
+
+(setq org-export-with-sub-superscripts nil)
+(require 'org-element)
 
 
 
@@ -89,7 +161,6 @@
   (advice-add 'org-refile :after 'org-save-all-org-buffers)
 
   (gemacs/org-font-setup)
-  (gemacs/org-publish-setup)
 
   )
 
@@ -114,7 +185,7 @@
 
 
 (setq gemacs/org-inbox-path "~/org/inbox.org")
-(setq gemacs/org-journal-path "~/org/journal.org")
+(setq gemacs/org-journal-path "~/Dev/journal/journal.org")
 
 (setq org-capture-templates
       '(

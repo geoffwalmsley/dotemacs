@@ -21,21 +21,25 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
+;; Secrets
+;; Store everything in a list of cons boxes in secrets.el (and never commit that file)
+(defun my-auth (key)
+  (with-temp-buffer
+    (insert-file-contents-literally "~/.emacs.d/secrets.el")
+    (alist-get key (read (current-buffer)))))
+
 ;; Org AI
 (use-package org-ai
   :ensure
   :commands (org-ai-mode)
   :custom
-  (org-ai-openai-api-token "") ;; ADD DURING SETUP
+  (org-ai-openai-api-token (my-auth 'gpt))
   :init
   (add-hook 'org-mode-hook #'org-ai-mode)
   ;; :config
   ;; if you are using yasnippet and want `ai` snippets
   ;; (org-ai-install-yasnippets))
  )
-
-
-(add-to-list 'image-types 'svg)
 
 ;; Using perspective for buffer switching
 (use-package perspective
@@ -58,17 +62,6 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-;; Make vterm load ~/.bash_profile
-(defun gemacs/source-bash-profile ()
-      (interactive)
-      (vterm-send-string "bash\nsource ~/.bash_profile\n"))
-
-(add-hook 'vterm-mode-hook #'gemacs/source-bash-profile)
-
-;; ace-jump
-(require 'ace-jump-mode)
-(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
-
 ;; 
 ;; Basic UI
 ;;
@@ -86,7 +79,7 @@
 (global-set-key (kbd "C-<up>") (kbd "C-u 5 M-v"))
 
 ;; Set up the visible bell
-(setq visible-bell t)
+(setq visible-bell nil)
 
 ;; Line Numbering
 (column-number-mode)
@@ -124,15 +117,6 @@
 (setq mac-command-modifier 'meta)
 (setq mac-option-modifier 'super)
 
-;; Buffer-Move (swapping windows)
-(require 'buffer-move)
-(global-set-key (kbd "<C-S-up>")     'buf-move-up)
-(global-set-key (kbd "<C-S-down>")   'buf-move-down)
-(global-set-key (kbd "<C-S-left>")   'buf-move-left)
-(global-set-key (kbd "<C-S-right>")  'buf-move-right)
-
-
-(require 'ox-gemini)
 
 ;; 
 ;; Fonts
@@ -196,13 +180,6 @@
   (setq enable-recursive-minibuffers t)
   (counsel-mode 1))
 
-;; (use-package counsel
-;;   :bind (("M-x" . counsel-M-x)
-;;          ("C-x b" . counsel-ibuffer)
-;;          ("C-x C-f" . counsel-find-file)
-;;          :map minibuffer-local-map
-;;          ("C-r" . 'counsel-minibuffer-history)))
-
 (use-package ivy
   :ensure t
   :diminish
@@ -253,22 +230,17 @@
   :ensure nil
   :config
   (add-to-list 'tramp-remote-path 'tramp-own-remote-path)
-  (add-to-list 'tramp-remote-path "/home/geoff/AggSigAPI/venv/bin/")
-  (add-to-list 'tramp-remote-path "/home/geoff/chia-blockchain/venv/bin/")
-  
   (customize-set-variable 'tramp-use-ssh-controlmaster-options nil)
-  (add-to-list 'tramp-connection-properties
-               (list (regexp-quote "/ssh:geoff@memex:")
-		     (regexp-quote "/ssh:geoff@memex2:")
 
-                   "session-timeout" nil))
   (setq enable-remote-dir-locals t))
 
+;; Tree sitter
+(use-package tree-sitter
+  :ensure t)
+(use-package tree-sitter-langs
+  :ensure t)
 
-;; (customize-set-variable 'tramp-verbose 6 "Enable remote command traces")
-;; (with-eval-after-load 'tramp (tramp-change-syntax 'simplified))
-;; (setq enable-remote-dir-locals t)
-
+(global-tree-sitter-mode)
 
 ;; Org Mode
 (load-file "~/.emacs.d/gemacs/gemacs-org.el")
@@ -307,33 +279,19 @@
 
 (require 'generic-x)
 
-(yas-global-mode)
-
-;; Custom Vars
-
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   '("71ac1434a07579da9b1ec1dd1a2b9cfa3182523d750678b68db6c25749fb6494" "986cdc701d133f7c6b596f06ab5c847bebdd53eb6bc5992e90446d2ddff2ad9e" "5fdc0f5fea841aff2ef6a75e3af0ce4b84389f42e57a93edc3320ac15337dc10" "d6da24347c813d1635a217d396cf1e3be26484fd4d05be153f3bd2b293d2a0b5" "0568a5426239e65aab5e7c48fa1abde81130a87ddf7f942613bf5e13bf79686b" default))
- '(erc-notify-list '("mathsboy") nil nil "Notify for mentions of myself")
- '(exec-path
-   '("/usr/bin" "/bin" "/usr/sbin" "/sbin" "/Applications/Emacs.app/Contents/MacOS/bin-x86_64-10_14" "/Applications/Emacs.app/Contents/MacOS/libexec-x86_64-10_14" "/Applications/Emacs.app/Contents/MacOS/libexec" "/Applications/Emacs.app/Contents/MacOS/bin" "/Users/jupiter/.cargo/bin"))
- '(line-number-mode nil)
- '(org-agenda-files '("~/org/journal.org" "~/org/inbox.org"))
+ '(org-agenda-files '("~/org/inbox.org"))
  '(package-selected-packages
-   '(tree-sitter-langs tree-sitter org-ai org-roam-ui paredit projectile-ripgrep ripgrep load-theme-buffer-local lsp-ui lsp-mode blacken ob-ipython perspective ox-tufte htmlize ox-gemini bongo elpher rg counsel-projectile buffer-move elfeed-org elfeed company w3m vterm jupyter org-pdfview pyvenv python-mode magit org-roam modus-themes helpful counsel ivy-rich ivy which-key all-the-icons use-package))
- '(pdf-tools-handle-upgrades nil)
- '(tramp-use-ssh-controlmaster-options nil))
+   '(htmlize rust-mode tree-sitter-langs tree-sitter which-key vterm use-package pyvenv python-mode perspective pdf-tools ox-tufte org-roam org-ai modus-themes magit lsp-ui jupyter ivy-rich helpful elfeed-org counsel-projectile blacken all-the-icons))
+ '(pdf-tools-handle-upgrades nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(elfeed-search-date-face ((t (:foreground "#eee"))))
- '(elfeed-search-title-face ((t (:foreground "#82b0ec"))))
- '(elfeed-search-unread-title-face ((t (:weight normal :family "Hack")))))
-(put 'upcase-region 'disabled nil)
+ )
 (put 'dired-find-alternate-file 'disabled nil)

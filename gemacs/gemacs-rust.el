@@ -1,5 +1,7 @@
 (add-to-list 'exec-path "/Users/jupiter/.cargo/bin")
 
+(use-package rust-mode
+  :ensure t)
 
 (use-package rustic
   :ensure

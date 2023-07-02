@@ -30,7 +30,7 @@
   :commands lsp
   :custom
   (lsp-eldoc-render-all nil)
-  (lsp-idle-delay 0.5)
+  (lsp-idle-delay 0.1)
   :init
   ;; (add-to-list 'company-backends 'company-capf)
   (setq lsp-keymap-prefix "C-c m")
@@ -46,8 +46,8 @@
   (setq lsp-diagnostics-provider :none)
   (setq lsp-eldoc-enable-hover nil)
   (setq lsp-signature-render-documentation nil)
-  (setq lsp-completion-show-detail nil)
-  (setq lsp-completion-show-kind nil)
+  ;; (setq lsp-completion-show-detail nil)
+  ;; (setq lsp-completion-show-kind nil)
 
 
   ;; (setq lsp-pyls-plugins-flake8-enabled t)
