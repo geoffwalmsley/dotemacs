@@ -1,22 +1,22 @@
-
 (defvar chialisp-functions
   '("+" "-" "*" "/" "divmod" "=" ">" ">s" "not" "all" "any" "if" "i" "x" "qq" "unquote" "q" "a" "@" "f" "r" "c" "l" "sha256" "sha256tree" "concat" "strlen" "substr" "logand" "logior" "logxor" "lognot" "ash"  "lsh" "point_add" "pubkey_for_exp" "softfork" "list"))
-(defvar chialisp-modules '("mod" "defun" "defun-inline" "defmacro" "defconstant" "include" "lambda" "defconst" "defmac"))
+(defvar chialisp-builtins '("mod" "defun" "defun-inline" "defmacro" "defconstant" "include" "lambda" "defconst" "defmac"))
 (defvar chialisp-conditions '("REMARK" "AGG_SIG_UNSAFE" "AGG_SIG_ME" "CREATE_COIN" "RESERVE_FEE" "CREATE_COIN_ANNOUNCEMENT" "ASSERT_COIN_ANNOUNCEMENT" "CREATE_PUZZLE_ANNOUNCEMENT" "ASSERT_PUZZLE_ANNOUNCEMENT" "ASSERT_MY_COIN_ID" "ASSERT_MY_PARENT_ID" "ASSERT_MY_PUZZLEHASH" "ASSERT_MY_AMOUNT" "ASSERT_SECONDS_RELATIVE" "ASSERT_SECONDS_ABSOLUTE" "ASSERT_HEIGHT_RELATIVE" "ASSERT_HEIGHT_ABSOLUTE" "ASSERT_CONCURRENT_SPEND" "ASSERT_CONCURRENT_PUZZLE" "ASSERT_MY_BIRTH_SECONDS" "ASSERT_MY_BIRTH_HEIGHT" "ASSERT_EPHEMERAL" "ASSERT_BEFORE_SECONDS_RELATIVE" "ASSERT_BEFORE_SECONDS_ABSOLUTE" "ASSERT_BEFORE_HEIGHT_RELATIVE" "ASSERT_BEFORE_HEIGHT_ABSOLUTE"))
 
 (defvar chialisp-font-lock-keywords
   (let ((keywords-regexp (concat "(\\(" (mapconcat 'identity chialisp-functions "\\|") "\\)\\>")))
     `((,keywords-regexp 1 'font-lock-function-name-face t)
-      (,(regexp-opt chialisp-modules 'words) . font-lock-builtin-face)
+      (,(regexp-opt chialisp-builtins 'words) . font-lock-builtin-face)
       (,(regexp-opt chialisp-conditions 'words) . font-lock-variable-name-face)
       )))
 
 
 (define-derived-mode chialisp-mode emacs-lisp-mode "Chialisp"
   "Major mode for editing chialisp files."
+  (setq-local tab-width 2)
   (setq-local font-lock-defaults '(chialisp-font-lock-keywords)))
 
-(add-to-list 'auto-mode-alist '("\\.clsp\\'" . chialisp-mode))
+(add-to-list 'auto-mode-alist '("\\(?:cl\\(?:ib\\|sp\\|vm\\)\\)" . chialisp-mode))
 
 (provide 'chialisp-mode)
 

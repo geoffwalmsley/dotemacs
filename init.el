@@ -30,16 +30,24 @@
 
 ;; Org AI
 (use-package org-ai
-  :ensure
-  :commands (org-ai-mode)
+  :load-path (lambda () "~/Dev/org-ai")
+  :ensure t
+  :commands (org-ai-mode
+	     org-ai-global-mode)
   :custom
   (org-ai-openai-api-token (my-auth 'gpt))
   :init
   (add-hook 'org-mode-hook #'org-ai-mode)
-  ;; :config
-  ;; if you are using yasnippet and want `ai` snippets
-  ;; (org-ai-install-yasnippets))
- )
+  (org-ai-global-mode)
+  :config
+  (setq org-ai-default-chat-model "gpt-4")
+  (setq markdown-fontify-code-blocks-natively t)
+  )
+
+(add-to-list 'org-structure-template-alist '("g" . "ai"))
+(global-set-key (kbd "C-c M-a") org-ai-global-prefix-map)
+
+
 
 ;; Using perspective for buffer switching
 (use-package perspective
@@ -262,9 +270,6 @@
 
 ;; ERC (IRC client for emacs)
 (load-file "~/.emacs.d/gemacs/gemacs-erc.el")
-
-;; EWW
-(load-file "~/.emacs.d/gemacs/gemacs-eww.el")
 
 ;; vterm
 (load-file "~/.emacs.d/gemacs/gemacs-vterm.el")
