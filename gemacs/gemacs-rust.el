@@ -62,7 +62,7 @@
 ;;   (lsp-ui-doc-enable nil))
 
 (use-package company
-  :ensure
+  :ensure t
   :custom
   (company-idle-delay 0.1) ;; how long to wait until popup
   ;; (company-begin-commands nil) ;; uncomment to disable popup

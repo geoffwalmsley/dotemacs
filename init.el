@@ -275,7 +275,7 @@
 (load-file "~/.emacs.d/gemacs/gemacs-vterm.el")
 
 ;; rust
-;; (load-file "~/.emacs.d/gemacs/gemacs-rust.el")
+(load-file "~/.emacs.d/gemacs/gemacs-rust.el")
 
 (load-file "~/.emacs.d/chialisp-mode.el")
 
@@ -288,7 +288,7 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files '("~/org/inbox.org"))
  '(package-selected-packages
-   '(htmlize rust-mode tree-sitter-langs tree-sitter which-key vterm use-package pyvenv python-mode perspective pdf-tools ox-tufte org-roam org-ai modus-themes magit lsp-ui jupyter ivy-rich helpful elfeed-org counsel-projectile blacken all-the-icons))
+   '(ob-rust paredit company htmlize rust-mode tree-sitter-langs tree-sitter which-key vterm use-package pyvenv python-mode perspective pdf-tools ox-tufte org-roam org-ai modus-themes magit lsp-ui jupyter ivy-rich helpful elfeed-org counsel-projectile blacken all-the-icons))
  '(pdf-tools-handle-upgrades nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

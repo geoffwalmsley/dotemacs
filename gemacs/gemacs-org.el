@@ -171,7 +171,7 @@ Return output file name."
  'org-babel-load-languages
  '((emacs-lisp . t)
    (python . t)
-   ;(ipython . t)
+   (rust . t)
    (shell . t)
    ;(jupyter . t)
    )
