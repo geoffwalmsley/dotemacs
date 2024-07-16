@@ -61,6 +61,17 @@
 ;;   (lsp-ui-sideline-show-hover t)
 ;;   (lsp-ui-doc-enable nil))
 
+(require 'dap-python)
+
+    (dap-register-debug-template "Rust::LLDB Debug Configuration"
+      (list :type "lldb"
+            :request "launch"
+            :name "LLDB::Run"
+            :gdbpath "rust-lldb"
+            :target nil
+            :cwd nil
+            :program nil))
+
 (use-package company
   :ensure t
   :custom

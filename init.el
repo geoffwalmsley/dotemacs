@@ -28,6 +28,8 @@
     (insert-file-contents-literally "~/.emacs.d/secrets.el")
     (alist-get key (read (current-buffer)))))
 
+;; comment
+
 ;; Org AI
 (use-package org-ai
   :load-path (lambda () "~/Dev/org-ai")
@@ -40,7 +42,7 @@
   (add-hook 'org-mode-hook #'org-ai-mode)
   (org-ai-global-mode)
   :config
-  (setq org-ai-default-chat-model "gpt-4")
+  (setq org-ai-default-chat-model "gpt-4o")
   (setq markdown-fontify-code-blocks-natively t)
   )
 
@@ -147,7 +149,10 @@
 
 
 ;; Default browser (eww)
-(setq browse-url-browser-function 'eww-browse-url)
+;; (setq browse-url-browser-function 'eww-browse-url)
+(setq browse-url-browser-function 'browse-url-generic
+      browse-url-generic-program "open"
+      browse-url-generic-args '("-a" "Google Chrome"))
 
 
 ;; 
@@ -248,6 +253,16 @@
 (use-package tree-sitter-langs
   :ensure t)
 
+(defun my-setup-initial-window-setup ()
+  "Do what I want for initial window setup."
+  (interactive)
+  (pyvenv-activate "~/Dev/chia-blockchain/venv/")
+  (split-window-horizontally)
+  (vterm)
+  )
+
+(add-hook 'emacs-startup-hook #'my-setup-initial-window-setup)
+
 (global-tree-sitter-mode)
 
 ;; Org Mode
@@ -288,7 +303,7 @@
  ;; If there is more than one, they won't work right.
  '(org-agenda-files '("~/org/inbox.org"))
  '(package-selected-packages
-   '(ob-rust paredit company htmlize rust-mode tree-sitter-langs tree-sitter which-key vterm use-package pyvenv python-mode perspective pdf-tools ox-tufte org-roam org-ai modus-themes magit lsp-ui jupyter ivy-rich helpful elfeed-org counsel-projectile blacken all-the-icons))
+   '(sqlite-mode sqlite dap-mode python-pytest ob-rust paredit company htmlize rust-mode tree-sitter-langs tree-sitter which-key vterm use-package pyvenv python-mode perspective pdf-tools ox-tufte org-roam org-ai modus-themes magit lsp-ui jupyter ivy-rich helpful elfeed-org counsel-projectile blacken all-the-icons))
  '(pdf-tools-handle-upgrades nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

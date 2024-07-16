@@ -4,6 +4,13 @@
 ;; Execute buffer with C-c C-c
 ;; Use M-x py-split-windows-on-execute-off to keep everything static.
 
+;; Pytest
+(use-package python-pytest
+  :ensure t
+  :bind (:map python-mode-map
+	      ("C-c t" . python-pytest-dispatch))
+  )
+(add-hook 'comint-output-filter-functions 'python-pdbtrack-comint-output-filter-function)
 (use-package python-mode
   :ensure t
   :config

@@ -153,6 +153,7 @@ Return output file name."
   :config
   (setq org-ellipsis " ▾")
   (setq org-agenda-start-with-log-mode t)
+  (setq org-agenda-restore-windows-after-quit t)
   (setq org-log-done 'time)
   (setq org-log-into-drawer t)
   (setq org-attach-id-dir "~/org/data/")
@@ -185,7 +186,7 @@ Return output file name."
 
 
 (setq gemacs/org-inbox-path "~/org/inbox.org")
-(setq gemacs/org-journal-path "~/Dev/journal/journal.org")
+(setq gemacs/org-journal-path "~/org/journal.org")
 
 (setq org-capture-templates
       '(
