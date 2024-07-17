@@ -28,8 +28,6 @@
     (insert-file-contents-literally "~/.emacs.d/secrets.el")
     (alist-get key (read (current-buffer)))))
 
-;; comment
-
 ;; Org AI
 (use-package org-ai
   :load-path (lambda () "~/Dev/org-ai")
